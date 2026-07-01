@@ -1,0 +1,131 @@
+/* =========================================================================
+   Global styles — the shared look & feel for the whole site.
+   Edit the variables below to restyle everything at once.
+   ========================================================================= */
+
+:root {
+	/* Colors — a warm, playful palette. Change these to reskin the site. */
+	--bg: #fbf6ee;          /* page background (warm cream) */
+	--ink: #211d18;         /* main text (soft near-black) */
+	--muted: #6b6357;       /* secondary text */
+	--accent: #e5674f;      /* primary accent (coral) */
+	--accent-2: #4f8a7b;    /* secondary accent (sage) */
+	--card: #ffffff;        /* card / surface background */
+	--line: #e7ded1;        /* hairline borders */
+
+	/* Type */
+	--font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--font-display: "Fraunces", Georgia, "Times New Roman", serif;
+
+	/* Spacing / shape */
+	--radius: 14px;
+	--maxw: 780px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--ink);
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.65;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+	font-family: var(--font-display);
+	font-weight: 600;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+
+a {
+	color: var(--accent);
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+/* Layout wrapper */
+.wrap {
+	max-width: var(--maxw);
+	margin: 0 auto;
+	padding: 0 1.25rem;
+}
+
+/* -------- Navigation -------- */
+.site-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1.25rem;
+	max-width: var(--maxw);
+	margin: 0 auto;
+	flex-wrap: wrap;
+}
+.site-nav .brand {
+	font-family: var(--font-display);
+	font-weight: 600;
+	font-size: 1.15rem;
+	color: var(--ink);
+}
+.site-nav nav {
+	display: flex;
+	gap: 1.25rem;
+}
+.site-nav nav a {
+	color: var(--muted);
+	font-size: 0.98rem;
+}
+.site-nav nav a:hover,
+.site-nav nav a[aria-current="page"] {
+	color: var(--ink);
+	text-decoration: none;
+	border-bottom: 2px solid var(--accent);
+}
+
+/* -------- Content sections -------- */
+main {
+	padding: 2rem 0 4rem;
+}
+.lede {
+	font-size: 1.15rem;
+	color: var(--muted);
+}
+
+/* Simple card, reused across pages */
+.card {
+	background: var(--card);
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 1.5rem;
+}
+
+/* -------- Footer -------- */
+.site-footer {
+	border-top: 1px solid var(--line);
+	margin-top: 3rem;
+	padding: 1.5rem 1.25rem;
+	color: var(--muted);
+	font-size: 0.9rem;
+	text-align: center;
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	* { animation: none !important; transition: none !important; }
+}

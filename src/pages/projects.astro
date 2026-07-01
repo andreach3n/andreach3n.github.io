@@ -1,0 +1,61 @@
+---
+// Projects — this is where the "creative & interactive" energy lives.
+// For now it's a simple grid; later we can turn each card into its own
+// interactive island (animations, mini-demos, the flower garden, etc.).
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+	{
+		title: 'Project one',
+		blurb: 'A sentence about what it is and why it was fun to make.',
+		href: '#',
+	},
+	{
+		title: 'Project two',
+		blurb: 'Another short description. Add a link, an image, or a live demo.',
+		href: '#',
+	},
+	{
+		title: 'Something interactive ✨',
+		blurb: 'A placeholder for the playful, hands-on stuff you want to build.',
+		href: '#',
+	},
+];
+---
+
+<BaseLayout title="Projects · Andrea Chen">
+	<h1>Projects</h1>
+	<p class="lede">
+		Things I've made. This page is my playground — expect it to get weird
+		and interactive over time.
+	</p>
+
+	<div class="grid">
+		{projects.map((p) => (
+			<a class="card project" href={p.href}>
+				<h2>{p.title}</h2>
+				<p>{p.blurb}</p>
+			</a>
+		))}
+	</div>
+</BaseLayout>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 1rem;
+		margin-top: 1.5rem;
+	}
+	.project {
+		color: var(--ink);
+		transition: transform 0.15s ease, box-shadow 0.15s ease;
+	}
+	.project:hover {
+		text-decoration: none;
+		transform: translateY(-3px);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	}
+	.project h2 { font-size: 1.25rem; margin: 0 0 0.4rem; }
+	.project p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+</style>
