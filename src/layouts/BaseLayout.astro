@@ -1,18 +1,28 @@
 ---
 // BaseLayout — the shared HTML shell for every page.
-// Each page passes a `title` (and optional `description`) and its content
-// goes into the <slot />. Edit the nav / footer here once and it updates
-// everywhere.
+// Pass `title` (and optional `description`). Content goes into the <slot />.
+//
+// Two nav styles, chosen per page with the `nav` prop:
+//   nav="top"  (default) -> horizontal nav bar across the top, centered column
+//   nav="left"           -> vertical nav on the left, wide content area
+// Use `wide` with either to widen the content area (good for the pond).
 import '../styles/global.css';
 
 interface Props {
 	title: string;
 	description?: string;
+	nav?: 'top' | 'left';
+	wide?: boolean;
 }
 
-const { title, description = "Andrea Chen's personal website." } = Astro.props;
+const {
+	title,
+	description = "Andrea Chen's personal website.",
+	nav = 'top',
+	wide = false,
+} = Astro.props;
 
-// The links that appear in the top navigation.
+// The links that appear in the navigation.
 const navLinks = [
 	{ href: '/', label: 'Home' },
 	{ href: '/projects', label: 'Projects' },
@@ -43,27 +53,143 @@ const isCurrent = (href: string) =>
 			rel="stylesheet"
 		/>
 	</head>
-	<body>
-		<header class="site-nav">
-			<a class="brand" href="/">andrea chen</a>
-			<nav>
-				{navLinks.map((link) => (
-					<a
-						href={link.href}
-						aria-current={isCurrent(link.href) ? 'page' : undefined}
-					>
-						{link.label}
-					</a>
-				))}
-			</nav>
-		</header>
 
-		<main class="wrap">
-			<slot />
-		</main>
+	{nav === 'left' ? (
+		<body>
+			<div class:list={['shell', { wide }]}>
+				<aside class="side-nav">
+					<a class="brand" href="/">andrea chen</a>
+					<nav>
+						{navLinks.map((link) => (
+							<a
+								href={link.href}
+								aria-current={isCurrent(link.href) ? 'page' : undefined}
+							>
+								{link.label}
+							</a>
+						))}
+					</nav>
+					<p class="side-foot"> andrea chen :) </p>
+				</aside>
+				<main class="side-content">
+					<slot />
+				</main>
+			</div>
+		</body>
+	) : (
+		<body>
+			<header class="site-nav">
+				<a class="brand" href="/">andrea chen</a>
+				<nav>
+					{navLinks.map((link) => (
+						<a
+							href={link.href}
+							aria-current={isCurrent(link.href) ? 'page' : undefined}
+						>
+							{link.label}
+						</a>
+					))}
+				</nav>
+			</header>
 
-		<footer class="site-footer">
-			<p> andrea chen :) </p>
-		</footer>
-	</body>
+			<main class:list={['wrap', { wide }]}>
+				<slot />
+			</main>
+
+			<footer class="site-footer">
+				<p> andrea chen :) </p>
+			</footer>
+		</body>
+	)}
 </html>
+
+<style>
+	/* ===== Left-nav layout ===== */
+	.shell {
+		display: flex;
+		gap: 2.5rem;
+		max-width: 1160px;   /* widen the whole layout; raise for a bigger canvas */
+		margin: 0 auto;
+		/* Left/right breathing room. Raise the clamp middle (5vw) or max (4.5rem)
+		   for even more side border; lower them for less. */
+		padding: 2rem clamp(1.5rem, 5vw, 4.5rem);
+		min-height: 100vh;
+		box-sizing: border-box;
+	}
+	.shell.wide { max-width: 1320px; }
+
+	.side-nav {
+		flex: 0 0 190px;     /* nav column width — nudge this to shift the pond */
+		align-self: center;  /* vertically centered against the content, every page */
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+	}
+	.side-nav .brand {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.25rem;
+		color: var(--ink);
+	}
+	.side-nav nav {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+	.side-nav nav a {
+		color: var(--muted);
+		font-size: 1.08rem;
+		border-left: 3px solid transparent;
+		padding-left: 10px;
+	}
+	.side-nav nav a:hover,
+	.side-nav nav a[aria-current='page'] {
+		color: var(--ink);
+		text-decoration: none;
+		border-left-color: var(--accent);
+	}
+	.side-foot {
+		margin-top: 2rem;
+		color: var(--muted);
+		font-size: 0.85rem;
+	}
+
+	.side-content {
+		flex: 1 1 auto;
+		min-width: 0; /* lets wide children (the pond) fill without overflow */
+		padding-top: 0.5rem;
+	}
+
+	/* Wide pond page: also center the pond itself vertically so it sits level
+	   with the (already centered) sidebar. */
+	.shell.wide { align-items: center; }
+
+	/* Stack the nav on top on narrow screens */
+	@media (max-width: 720px) {
+		.shell {
+			flex-direction: column;
+			gap: 1rem;
+			padding: 1.25rem;
+		}
+		.side-nav {
+			align-self: stretch;
+			flex-basis: auto;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.8rem 1.1rem;
+		}
+		.side-nav nav {
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 0.8rem;
+		}
+		.side-nav nav a { border-left: none; padding-left: 0; }
+		.side-foot { margin-top: 0; width: 100%; }
+	}
+
+	/* Let a `wide` top-layout page break past the normal text column too */
+	:global(main.wrap.wide) {
+		max-width: 1100px;
+	}
+</style>
