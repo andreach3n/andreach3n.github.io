@@ -1,0 +1,144 @@
+---
+// Now — what you're up to at the moment (the nnw.co/now idea).
+// Update it every so often and bump the date below.
+//
+// "just for fun" is a gallery wall: borderless photos in a jagged,
+// staggered cluster. To hang a photo: drop the image into public/fun/
+// and give a frame below a src (and alt) —
+//   { c: …, r: …, src: '/fun/your-photo.jpg', alt: 'describe it' }
+// A frame with a `caption` shows it in small grey text below the photo
+// when hovered. Frames without a src show a [photo] placeholder. Each
+// frame is { c, r } = grid-column / grid-row lines (12-col grid), plus
+// a small y nudge for jag.
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const frames = [
+	{ c: '1 / 4', r: '2 / 7' },
+	{ c: '4 / 6', r: '1 / 4', src: '/fun/adt.jpg', alt: 'adt', caption: 'adt!' },
+	{ c: '4 / 6', r: '4 / 6', y: '6px' },
+	{ c: '6 / 9', r: '1 / 5' },
+	{ c: '6 / 8', r: '5 / 8', y: '4px' },
+	{ c: '8 / 10', r: '5 / 8', y: '-6px' },
+	{ c: '9 / 11', r: '2 / 5', src: '/fun/sophia.JPG', alt: 'sophia', caption: 'i love cafes' },
+	{ c: '11 / 13', r: '1 / 5', y: '10px', src: '/fun/social.jpg', alt: 'social', caption: 'you will be fined.' },
+	{ c: '10 / 13', r: '5 / 8', y: '2px', src: '/fun/anna-anastasia.jpg', alt: 'Anna and Anastasia', caption: 'post sf nonexistent 4th of july fireworks' },
+	{ c: '2 / 4', r: '7 / 10', y: '-4px' },
+	{ c: '4 / 6', r: '6 / 9', y: '10px', src: '/fun/claude.jpg', alt: 'claude', caption: 'claude?!' },
+	{ c: '6 / 9', r: '8 / 11', src: '/fun/wsparc.JPG', alt: 'wsparc', caption: 'wsparc - going to the park in a foot of snow :)' },
+	{ c: '9 / 11', r: '8 / 10', y: '-6px', src: '/fun/happycakes.jpg', alt: 'happycake', caption: "don't these cakes look so happy" },
+];
+---
+
+<BaseLayout title="now — Andrea Chen" heading="now">
+	<p>
+		<ul>
+			<li>working on mech interp research! read about my progress <a href="/research-log">here</a></li>
+			<li>where to find me: SPARC (end of July), Iliad Intensive (August)</li>
+			<li>reading <em>[book title]</em></li>
+		</ul>
+	</p>
+
+	<section class="fun">
+		<h2>just for fun</h2>
+		<div class="wall">
+			{frames.map((f) => (
+				<figure
+					class="frame"
+					style={`grid-column: ${f.c}; grid-row: ${f.r}; --y: ${f.y ?? '0px'}`}
+				>
+					{f.src
+						? <img src={f.src} alt={f.alt ?? ''} loading="lazy" />
+						: <div class="ph">[photo]</div>}
+					{f.caption && <figcaption>{f.caption}</figcaption>}
+				</figure>
+			))}
+		</div>
+	</section>
+
+	<p class="dim">last updated [filler - date]</p>
+</BaseLayout>
+
+<style>
+	/* Break out of the right column so the section starts at the same left
+	   edge as the big "now" title (left column width + column gap, matching
+	   BaseLayout: flex-basis clamp(200px, 26vw, 300px) and gap 3rem). */
+	.fun {
+		--breakout: calc(clamp(200px, 26vw, 300px) + 3rem);
+		width: calc(100% + var(--breakout));
+		margin: 4rem 0 2.5rem calc(-1 * var(--breakout));
+	}
+	.fun h2 {
+		font-size: 1.5rem;
+		margin: 0 0 1.5rem;
+	}
+
+	/* --- the gallery wall -------------------------------------------------- */
+	.wall {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		grid-auto-rows: 42px;
+		gap: 16px;
+	}
+	.frame {
+		position: relative;
+		margin: 0;
+		transform: translateY(var(--y, 0));
+		box-shadow: 0 1px 5px rgba(28, 27, 25, 0.16);
+		display: flex;
+	}
+
+	/* hover caption: small grey label just below the photo. It sits on a
+	   little bg-colored pill so it stays readable over a neighboring photo. */
+	.frame figcaption {
+		position: absolute;
+		top: calc(100% + 5px);
+		left: 50%;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		font-size: 0.75rem;
+		line-height: 1.5;
+		color: var(--muted);
+		background: var(--bg);
+		padding: 0 8px;
+		border-radius: 3px;
+		box-shadow: 0 1px 4px rgba(28, 27, 25, 0.1);
+		opacity: 0;
+		transition: opacity 0.18s ease;
+		pointer-events: none;
+	}
+	.frame:hover {
+		z-index: 1; /* keep the caption above neighboring photos */
+	}
+	.frame:hover figcaption {
+		opacity: 1;
+	}
+
+	/* placeholder until a real <img> is hung */
+	.ph {
+		flex: 1;
+		display: grid;
+		place-items: center;
+		background: linear-gradient(155deg, #ece9e3, #dedad2);
+		color: var(--muted);
+		font-size: 0.72rem;
+	}
+	.frame :global(img) {
+		flex: 1;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	/* Stack back into the single column on narrow screens. */
+	@media (max-width: 720px) {
+		.fun {
+			width: auto;
+			margin-left: 0;
+		}
+		.wall {
+			gap: 10px;
+			grid-auto-rows: 26px;
+		}
+	}
+</style>

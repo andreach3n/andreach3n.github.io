@@ -1,0 +1,46 @@
+---
+// Writing — a plain list of pieces. For now these are placeholders;
+// when you write something real we can turn this into a proper
+// markdown-powered collection (Astro makes that easy) — for the
+// moment each entry just links wherever you like.
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const pieces = [
+	{
+		title: '[filler - essay or post title]',
+		date: '[filler - month year]',
+		href: '[filler - link]',
+	},
+];
+---
+
+<BaseLayout title="writing — Andrea Chen" heading="writing">
+	<ul class="pieces">
+		{pieces.map((w) => (
+			<li>
+				<a href={w.href}>{w.title}</a>
+				<span class="dim">{w.date}</span>
+			</li>
+		))}
+	</ul>
+</BaseLayout>
+
+<style>
+	.pieces {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.1rem;
+	}
+	.pieces li {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.pieces .dim {
+		white-space: nowrap;
+	}
+</style>

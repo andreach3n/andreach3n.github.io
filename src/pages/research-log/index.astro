@@ -1,0 +1,55 @@
+---
+// Research-log index — lists every week, newest first. Each week is a
+// Markdown file (week-1.md, week-2.md, …) in this same folder; this page
+// finds them all automatically, so adding a week never means editing here.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Pull in every week file and read its frontmatter.
+const modules = import.meta.glob('./week-*.md', { eager: true });
+const weeks = Object.values(modules)
+	.map((m: any) => ({ ...m.frontmatter, url: m.url }))
+	.sort((a, b) => b.week - a.week);
+
+const fmt = (date: string) =>
+	date
+		? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+		: '';
+---
+
+<BaseLayout title="research log — Andrea Chen" heading="research log">
+	<p>
+		Trained linear maps from the embeddings to layer activations, and seeing what they can do
+	</p>
+
+	{weeks.length === 0 && <p class="dim">no entries yet — check back soon!</p>}
+
+	<ul class="log">
+		{weeks.map((w) => (
+			<li>
+				<a href={w.url}>Week {w.week}{w.title ? ` — ${w.title}` : ''}</a>
+				{w.date && <span class="dim date"> · {fmt(w.date)}</span>}
+				{w.blurb && <p class="dim blurb">{w.blurb}</p>}
+			</li>
+		))}
+	</ul>
+</BaseLayout>
+
+<style>
+	.log {
+		list-style: none;
+		padding: 0;
+		margin: 2rem 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.4rem;
+	}
+	.log a {
+		font-size: 1.05rem;
+	}
+	.date {
+		white-space: nowrap;
+	}
+	.blurb {
+		margin: 0.25rem 0 0;
+	}
+</style>

@@ -1,0 +1,69 @@
+---
+// Layout for a single research-log week. Each week is a Markdown file in
+// src/pages/research-log/ that sets `layout: ../../layouts/ResearchLogLayout.astro`
+// in its frontmatter; the Markdown body is rendered where <slot /> sits.
+import BaseLayout from './BaseLayout.astro';
+
+const { frontmatter } = Astro.props;
+const { week, title, date } = frontmatter;
+
+// YAML dates parse to a Date; format in UTC so the day never shifts.
+const d = date ? new Date(date) : null;
+const dateStr = d
+	? d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
+	: '';
+---
+
+<BaseLayout title={`week ${week} — research log`} heading="research log">
+	<p class="back"><a href="/research-log">← all weeks</a></p>
+
+	<article class="entry">
+		<h2>Week {week}{title ? ` — ${title}` : ''}</h2>
+		{dateStr && <p class="dim">{dateStr}</p>}
+		<slot />
+	</article>
+</BaseLayout>
+
+<style>
+	.back {
+		margin: 0 0 1.5rem;
+		font-size: 0.9rem;
+	}
+	.entry h2 {
+		font-size: 1.5rem;
+		margin: 0 0 0.25rem;
+	}
+
+	/* The Markdown body arrives via <slot />, so it lives in a different
+	   style scope — reach into it with :global() to style the rendered HTML. */
+	.entry :global(h3) {
+		font-size: 1.15rem;
+		margin: 2rem 0 0.5rem;
+	}
+	.entry :global(img) {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		margin: 1.5rem 0;
+	}
+	.entry :global(pre) {
+		overflow-x: auto;
+		padding: 1rem;
+		border-radius: 6px;
+		font-size: 0.85rem;
+	}
+	/* let wide display equations scroll instead of overflowing the page */
+	.entry :global(.katex-display) {
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding: 0.25rem 0;
+	}
+	.entry :global(blockquote) {
+		margin: 1.25rem 0;
+		padding-left: 1rem;
+		border-left: 2px solid var(--line);
+		color: var(--muted);
+	}
+</style>

@@ -1,413 +1,278 @@
 ---
-// Projects — an interactive lily pond.
-// Each project is a lilypad that drifts gently. Click one and it opens into
-// a wide detail panel while the rest of the pond pauses.
-//
-// To add / edit a project: change the `projects` array below.
-//   - title, blurb, skills, details  -> the content
-//   - label     -> optional SHORT text shown ON the pad. Use it when the title
-//                  is long; the full `title` still appears when the pad opens.
-//   - img       -> optional path to YOUR drawing, e.g. '/pond/lilypads/pad1.png'
-//                  (leave it off and you get the built-in green pad instead)
-//   - x, y      -> position in the pond (percent, pad's center)
-//   - size      -> pad diameter in px
-//   - rot       -> resting tilt
-//   - dx,dy,dur,delay -> the gentle drift (offset px, duration s, start offset s)
+// Projects — a list of titles; clicking one slides open a side panel with
+// a longer description (the title column shrinks to make room).
+// Add or edit entries in the array below:
+//   title   -> the project name (click target)
+//   note    -> one quiet line underneath (venue, year, tech, whatever)
+//   details -> the panel body, in order. Each item is either a paragraph
+//              (a plain string) or a photo (an object { src, alt, caption? }).
+//              Mix them freely to scatter photos between paragraphs. Photo
+//              files go in public/projects/ (src like '/projects/shot.png').
+//   links   -> optional external links at the bottom of the panel, one per
+//              line: [{ href: 'https://…', text: 'read the paper →' }, …]
+//              (for a single link you can also just use href / linkText.)
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const projects = [
 	{
-		id: '1',
-		title: 'Necklaces, permutations, and periodic critical orbits for quadratic polynomials',
-		img: '/pond/lilypads/mathresearch.png',
-		blurb: 'European Journal of Combinatorics, 2026',
-		skills: ['math research'],
-		details:
-			'A longer description of this project. What was the goal, what did you build, what was tricky or fun about it?\n\nAdd as many paragraphs as you like — this panel scrolls if it gets long.',
-		x: 27, y: 40, size: 300, rot: -6, dx: 14, dy: 11, dur: 13, delay: -2,
+		title: '"Flipped" Tuned Lens',
+		note: 'mechinterp research',
+		details: [
+			'Ongoing - I keep a log of what I try!',
+		],
+		links: [
+			{ href: '/research-log', text: 'weekly research log →' },
+		],
 	},
 	{
-		id: '2',
-		title: 'Project Two',
-		blurb: 'Something you made for the web.',
-		skills: ['React', 'TypeScript'],
-		details:
-			'Describe the second project here. Link out to a repo or a live demo if you have one.',
-		x: 53, y: 21, size: 174, rot: 5, dx: 12, dy: 15, dur: 15, delay: -6,
+		title: 'Pocket-Pod Sofa',
+		note: 'inflatable social sofa :)',
+		details: [
+			{src: '/projects/sofa1.jpg', alt:'sofa', caption: 'ft. Keira, our model'},
+			'more on this soon!'
+		],
 	},
 	{
-		id: '3',
-		title: 'An interactive thing ✨',
-		blurb: 'The playful, hands-on kind.',
-		skills: ['Canvas', 'JS'],
-		details:
-			'A place for the experimental, interactive work — the stuff that makes this site fun.',
-		x: 79, y: 35, size: 184, rot: -3, dx: 16, dy: 10, dur: 12, delay: -9,
+		title: 'Forming Waves: Mold-Pressed Aluminum',
+		note: 'molds, plywood, hydraulic press, deformation',
+		details: [
+			{src: '/projects/longwave.jpg', alt:'longwave'},
+			'more on this soon!'
+		],
 	},
 	{
-		id: '4',
-		title: 'Project Four',
-		blurb: 'A design-y project.',
-		skills: ['Figma', 'CSS'],
-		details: 'Details about a fourth project go here.',
-		x: 32, y: 71, size: 196, rot: 7, dx: 11, dy: 14, dur: 16, delay: -4,
+		title:
+			'Necklaces, permutations, and periodic critical orbits for quadratic polynomials',
+		note: 'European Journal of Combinatorics, 2026',
+		details: [
+			"Let $G_n$ denote the nth Gleason polynomial, whose roots correspond to parameters $c$ such that the critical point 0 is periodic of exact period $n$ under iteration of $z^2+c$, and let $\\bar{G}_n$ denote the reduction of $G_n$ modulo 2. Buff, Floyd, Koch, and Parry made the surprising observation that the number of real roots of $G_n$ is equal to the number of irreducible factors of $\\bar{G}_n$ for all $n$.",
+			"We provide a bijective proof for this result by first providing explicit bijections between (a) the set of real roots of $G_n$ and the set $\\bar{N}(n)$ of equivalence classes of primitive binary necklaces of length n under the inversion map swapping 0 and 1; and (b) the set of irreducible factors of $G_n$ modulo 2 and the set $\\tilde{N}^+(n)$ of binary necklaces which are either primitive of length n with an even number of 1's or primitive of length n/2 with an odd number of 1's. We then provide an explicit bijection, closely related to Milnor and Thurston's kneading theory, between $\\bar{N}(n)$ and $\\tilde{N}^+(n)$.",
+			"In addition, we provide explicit bijections between $\\bar{N}(n)$, the set CUP(n) of cyclic unimodal permutations of $\\{1,\\ldots,n\\}$, and the set $N^-(n)$ of primitive binary necklaces of length n with an odd number of 1's.",
+		],
+		links: [
+			{ href: 'https://www.sciencedirect.com/science/article/pii/S019566982600020X', text: 'read the paper →' },
+			{ href: 'https://meetings.ams.org/math/jmm2025/meetingapp.cgi/Paper/40130', text: 'AMS Special Session on Arithmetic Dynamics of Single and Multiple Maps' },
+		],
 	},
 	{
-		id: '5',
-		title: 'Project Five',
-		blurb: 'Recent work.',
-		skills: ['Rust'],
-		details: 'Details about a fifth project go here.',
-		x: 70, y: 72, size: 168, rot: -8, dx: 13, dy: 12, dur: 14, delay: -11,
+		title: 'Panic! at the Easel',
+		note: '1st Place MIT Web.Lab, 2026',
+		details: [
+			{src: '/projects/panic.png', alt:'game homepage'},
+			// a photo can go between paragraphs, like this:
+			// { src: '/projects/easel-1.png', alt: 'a screenshot of the game', caption: 'the drawing canvas' },
+			// '[filler — more description, picking up after the photo.]',
+		],
+		href: '[filler - link]',
 	},
 ];
 ---
 
-<BaseLayout title="Projects · Andrea Chen" nav="left" wide={true}>
-	<!-- Shared lilypad artwork (defined once, reused by every pad via <use>) -->
-	<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-		<defs>
-			<radialGradient id="lilyFill" cx="38%" cy="34%" r="75%">
-				<stop offset="0%" stop-color="#8fd76a" />
-				<stop offset="55%" stop-color="#59a648" />
-				<stop offset="100%" stop-color="#3b7a37" />
-			</radialGradient>
-			<symbol id="lilypad" viewBox="0 0 100 100">
-				<path
-					d="M50 50 L93.7 35.8 A46 46 0 1 1 93.7 64.2 Z"
-					fill="url(#lilyFill)"
-				/>
-				<g stroke="#2f6a2c" stroke-width="1.1" opacity="0.3" fill="none" stroke-linecap="round">
-					<path d="M50 50 L58 16" />
-					<path d="M50 50 L30 21" />
-					<path d="M50 50 L15 44" />
-					<path d="M50 50 L26 80" />
-					<path d="M50 50 L60 82" />
-				</g>
-			</symbol>
-		</defs>
-	</svg>
+<BaseLayout title="projects — Andrea Chen" heading="projects">
+	<div class="split" id="split">
+		<ul class="projects">
+			{projects.map((p, i) => (
+				<li>
+					<button class="title" data-open={i}>{p.title}</button>
+					<p class="dim">{p.note}</p>
+				</li>
+			))}
+		</ul>
 
-	<div class="pond" id="pond">
-		<div class="pond-water" aria-hidden="true">
-			<div class="ripples"></div>
-		</div>
-
-		{projects.map((p) => (
-			<button
-				class="lilypad"
-				data-id={p.id}
-				aria-haspopup="dialog"
-				style={`--x:${p.x}%; --y:${p.y}%; --size:${p.size}px; --rot:${p.rot}deg; --dx:${p.dx}px; --dy:${p.dy}px; --dur:${p.dur}s; --delay:${p.delay}s;`}
-			>
-				<span class="pad-inner">
-					{p.img
-						? <img class="pad-img" src={p.img} alt="" />
-						: <svg class="pad-svg" aria-hidden="true"><use href="#lilypad" /></svg>}
-					<span class="pad-label">
-						<span class="pad-title">{p.label || p.title}</span>
-						<span class="pad-blurb">{p.blurb}</span>
-						<span class="pad-skills">
-							{p.skills.map((s) => <span class="pad-skill">{s}</span>)}
-						</span>
-					</span>
-				</span>
-			</button>
-		))}
-
-		<!-- One reusable detail panel, filled in by the script on click -->
-		<div class="pond-backdrop" id="backdrop" hidden></div>
-		<div class="lily-detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" hidden>
-			<button class="detail-close" aria-label="Close">✕</button>
-			<h2 id="detail-title"></h2>
-			<div class="detail-skills" id="detail-skills"></div>
-			<div class="detail-body" id="detail-body"></div>
-		</div>
+		<aside class="panel" aria-label="project details">
+			<button class="close" data-close aria-label="close details">&times;</button>
+			{projects.map((p, i) => (
+				<article class="detail" data-detail={i} hidden>
+					<h3>{p.title}</h3>
+					<p class="dim">{p.note}</p>
+					{p.details?.map((item) =>
+						typeof item === 'string' ? (
+							<p>{item}</p>
+						) : (
+							<figure class="shot">
+								<img src={item.src} alt={item.alt ?? ''} loading="lazy" />
+								{item.caption && <figcaption>{item.caption}</figcaption>}
+							</figure>
+						)
+					)}
+					{(p.links ?? (p.href ? [{ href: p.href, text: p.linkText ?? 'link →' }] : [])).map((l) => (
+						<p class="link-row"><a href={l.href}>{l.text}</a></p>
+					))}
+				</article>
+			))}
+		</aside>
 	</div>
 </BaseLayout>
 
 <style>
-	.pond {
-		position: relative;
-		/* Fill most of the window height. Bump the vh number for a taller pond. */
-		height: clamp(460px, 80vh, 900px);
-		margin-top: 1rem;
-		isolation: isolate;
+	/* Two columns: titles | detail panel. The panel column is 0 wide until
+	   a project is opened; grid-template-columns animates the shrink. */
+	.split {
+		/* How far the open panel reaches past the normal content column
+		   toward the nav's right edge — the container is 1040px max, so the
+		   overhang on each side is (100vw - 1040px)/2, clamped to 0 on
+		   narrower screens where the content already meets the nav. */
+		--reach: max(0px, (100vw - 1040px) / 2);
+		display: grid;
+		grid-template-columns: 1fr 0fr;
+		gap: 0;
+		transition: grid-template-columns 0.35s ease, margin-right 0.35s ease;
+	}
+	.split.open {
+		grid-template-columns: 1fr 2fr;
+		gap: 2rem;
+		margin-right: calc(-1 * var(--reach));
 	}
 
-	/* The water layer. This is what softly fades out at the edges so the pond
-	   reads as an organic lake on the page instead of a hard rectangle.
-	   Pads and the pop-up panel live ABOVE this and stay crisp. */
-	.pond-water {
-		position: absolute;
-		inset: 0;
-		overflow: hidden;
-		/* Your drawn pond, centered and shown at its full size (`contain`).
-		   Because it sits on a transparent background, whatever empty space you
-		   leave around the pond in your PNG becomes the border. */
-		background: url('/pond/pond-bg.png') center / contain no-repeat;
+	/* When a panel is open, let the content shed the layout's 60ch reading
+	   cap so the titles + wider panel can use the full width. */
+	:global(.right-column:has(.split.open)) {
+		max-width: none;
 	}
 
-	/* Slow, subtle water ripples */
-	.ripples {
-		position: absolute;
-		inset: -20%;
-		background:
-			repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.06) 0 2px, transparent 2px 26px),
-			repeating-radial-gradient(circle at 72% 66%, rgba(255,255,255,0.05) 0 2px, transparent 2px 30px);
-		animation: ripple 18s linear infinite;
-		pointer-events: none;
-	}
-	@keyframes ripple {
-		from { transform: translate(0, 0); }
-		to   { transform: translate(20px, 16px); }
-	}
-
-	/* -------- Lilypads -------- */
-	.lilypad {
-		position: absolute;
-		left: var(--x);
-		top: var(--y);
-		width: var(--size);
-		height: var(--size);
-		margin: 0;
+	.projects {
+		list-style: none;
 		padding: 0;
-		border: none;
-		background: none;
-		cursor: pointer;
-		/* centering (-50%) + gentle drift live together here */
-		transform: translate(-50%, -50%);
-		animation: drift var(--dur) ease-in-out var(--delay) infinite;
-	}
-	@keyframes drift {
-		0%   { transform: translate(-50%, -50%) translate(0, 0) rotate(var(--rot)); }
-		25%  { transform: translate(-50%, -50%) translate(var(--dx), calc(var(--dy) * -1)) rotate(calc(var(--rot) + 3deg)); }
-		50%  { transform: translate(-50%, -50%) translate(0, var(--dy)) rotate(var(--rot)); }
-		75%  { transform: translate(-50%, -50%) translate(calc(var(--dx) * -1), 0) rotate(calc(var(--rot) - 3deg)); }
-		100% { transform: translate(-50%, -50%) translate(0, 0) rotate(var(--rot)); }
-	}
-
-	.pad-inner {
-		position: relative;
-		display: block;
-		width: 100%;
-		height: 100%;
-		transition: transform 0.2s ease;
-	}
-	.lilypad:hover .pad-inner { transform: scale(1.06); }
-	.lilypad:focus-visible { outline: none; }
-	.lilypad:focus-visible .pad-inner {
-		outline: 3px solid #ffffff;
-		outline-offset: 2px;
-		border-radius: 50%;
-	}
-
-	.pad-svg,
-	.pad-img {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		filter: drop-shadow(0 6px 8px rgba(0, 60, 40, 0.28));
-	}
-	/* Your hand-drawn pad: show the whole drawing, no cropping */
-	.pad-img {
-		object-fit: contain;
-	}
-
-	.pad-label {
-		position: absolute;
-		left: 50%;
-		top: 58%; /* nudged down; lower this % to raise the text, raise it to drop further */
-		transform: translate(-50%, -50%);
-		width: 80%; /* how far the text spreads across the pad */
-		text-align: center;
-		color: #10331a;
-		pointer-events: none;
+		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25em;
+		gap: 1.6rem;
+		min-width: 0;
+		max-width: 60ch; /* keep the closed title list at a comfortable width */
+	}
+	.projects p {
+		margin: 0.15rem 0 0;
 	}
 
-	.pad-title {
-		font-family: var(--font-display);
-		font-weight: 600;
-		font-size: clamp(0.68rem, 1.4vw, 0.95rem);
-		line-height: 1.25;
-	}
-	.pad-blurb {
-		font-size: clamp(0.6rem, 1.2vw, 0.72rem);
-		line-height: 1.25;
-		color: #1c4a26;
-	}
-	.pad-skills {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 3px;
-		justify-content: center;
-		margin-top: 0.15em;
-	}
-	.pad-skill {
-		font-size: clamp(0.52rem, 1vw, 0.62rem);
-		background: rgba(255, 255, 255, 0.55);
-		color: #16451f;
-		padding: 1px 6px;
-		border-radius: 999px;
-		white-space: nowrap;
-	}
-
-	/* -------- Focused state: pause + dim the rest of the pond -------- */
-	.pond.focused .lilypad {
-		animation-play-state: paused;
-		opacity: 0.45;
-		pointer-events: none;
-		filter: saturate(0.8);
-	}
-
-	.pond-backdrop {
-		position: absolute;
-		inset: 0;
-		background: rgba(12, 45, 38, 0.35);
-		border-radius: 26px;
-		-webkit-mask-image: radial-gradient(115% 115% at 50% 45%, #000 52%, transparent 100%);
-		mask-image: radial-gradient(115% 115% at 50% 45%, #000 52%, transparent 100%);
-		opacity: 0;
-		transition: opacity 0.25s ease;
-		z-index: 5;
-	}
-	.pond-backdrop.show { opacity: 1; }
-
-	/* -------- Expanded detail: the "wide lilypad" -------- */
-	.lily-detail {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		z-index: 6;
-		width: min(92%, 620px);
-		max-height: 86%;
-		overflow: auto;
-		padding: 1.6rem 1.8rem;
-		background: #f7fdf3;
-		border: 3px solid #4f9a45;
-		/* an organic, lilypad-ish outline */
-		border-radius: 46% 46% 44% 44% / 20px 20px 20px 20px;
-		box-shadow: 0 18px 40px rgba(0, 50, 35, 0.3);
-		transform: translate(-50%, -50%) scale(0.9);
-		opacity: 0;
-		transition: opacity 0.25s ease, transform 0.25s ease;
-	}
-	.lily-detail.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-	.lily-detail h2 { margin: 0 0 0.2rem; }
-	.detail-close {
-		position: absolute;
-		top: 0.7rem;
-		right: 0.9rem;
-		border: none;
-		background: #e8f4e2;
-		color: #2f6a2c;
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		font-size: 1rem;
+	/* Titles are buttons but dress like the links they used to be. */
+	.title {
+		all: unset;
 		cursor: pointer;
-		line-height: 1;
+		color: var(--accent);
 	}
-	.detail-close:hover { background: #d6ebcd; }
-	.detail-skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.5rem 0 1rem; }
-	.detail-skills .chip {
-		font-size: 0.8rem;
-		background: #e2f2db;
-		color: #2c5d2c;
-		padding: 3px 10px;
-		border-radius: 999px;
+	.title:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
-	.detail-body p { margin: 0 0 0.8rem; }
-	.detail-body p:last-child { margin-bottom: 0; }
+	.title:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+	.title[aria-expanded='true'] {
+		color: var(--ink);
+		font-weight: 600;
+	}
 
-	/* Smaller screens: taller pond so pads have room */
-	@media (max-width: 640px) {
-		.pond { height: 640px; }
+	/* --- the side panel ---------------------------------------------------- */
+	.panel {
+		position: relative;
+		min-width: 0;
+		overflow: hidden; /* lets the column collapse to 0 cleanly */
+		opacity: 0;
+		transition: opacity 0.3s ease 0.1s;
+		border-left: 1px solid var(--line);
+		padding-left: 2rem;
+		align-self: start;
+	}
+	.split.open .panel {
+		opacity: 1;
+	}
+	.panel h3 {
+		margin: 0 2rem 0.25rem 0; /* leave room for the × */
+		font-size: 1.15rem;
+	}
+	.panel p {
+		font-size: 0.95rem;
+	}
+	/* stacked links sit close together as a little list */
+	.link-row {
+		margin: 0.35rem 0 0;
+	}
+
+	/* photos inside the panel */
+	.shot {
+		margin: 1.25rem 0;
+	}
+	.shot img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: 1px solid var(--line);
+		border-radius: 4px;
+	}
+	.shot figcaption {
+		margin-top: 0.4rem;
+		color: var(--muted);
+		font-size: 0.8rem;
+		line-height: 1.5;
+	}
+	.close {
+		all: unset;
+		cursor: pointer;
+		position: absolute;
+		top: -0.2rem;
+		right: 0.2rem;
+		font-size: 1.3rem;
+		line-height: 1;
+		color: var(--muted);
+		padding: 0.2rem 0.4rem;
+	}
+	.close:hover {
+		color: var(--ink);
+	}
+	.close:focus-visible {
+		outline: 2px solid var(--accent);
+		border-radius: 2px;
+	}
+
+	/* On narrow screens the panel sits below the list instead of beside it. */
+	@media (max-width: 720px) {
+		.split,
+		.split.open {
+			display: block;
+		}
+		.panel {
+			display: none;
+			border-left: 0;
+			border-top: 1px solid var(--line);
+			padding: 1.25rem 0 0;
+			margin-top: 1.75rem;
+		}
+		.split.open .panel {
+			display: block;
+			opacity: 1;
+		}
 	}
 </style>
 
-<script define:vars={{ projects }}>
-	(function () {
-		function init() {
-			const pond = document.getElementById('pond');
-			const detail = document.getElementById('detail');
-			const backdrop = document.getElementById('backdrop');
-			const elTitle = document.getElementById('detail-title');
-			const elSkills = document.getElementById('detail-skills');
-			const elBody = document.getElementById('detail-body');
-			const closeBtn = detail.querySelector('.detail-close');
-			if (!pond || !detail) return;
+<script>
+	const split = document.getElementById('split')!;
+	const titles = [...split.querySelectorAll<HTMLButtonElement>('[data-open]')];
+	const details = [...split.querySelectorAll<HTMLElement>('[data-detail]')];
 
-			const byId = Object.fromEntries(projects.map((p) => [String(p.id), p]));
-			let lastFocused = null;
+	function close() {
+		split.classList.remove('open');
+		titles.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+		details.forEach((d) => (d.hidden = true));
+	}
 
-			function open(id) {
-				const p = byId[id];
-				if (!p) return;
+	titles.forEach((btn) => {
+		btn.setAttribute('aria-expanded', 'false');
+		btn.addEventListener('click', () => {
+			const i = btn.dataset.open;
+			const already = btn.getAttribute('aria-expanded') === 'true';
+			close();
+			if (already) return; // clicking the open title again closes it
+			split.classList.add('open');
+			btn.setAttribute('aria-expanded', 'true');
+			const detail = details.find((d) => d.dataset.detail === i);
+			if (detail) detail.hidden = false;
+		});
+	});
 
-				elTitle.textContent = p.title;
-
-				elSkills.innerHTML = '';
-				(p.skills || []).forEach((s) => {
-					const chip = document.createElement('span');
-					chip.className = 'chip';
-					chip.textContent = s;
-					elSkills.appendChild(chip);
-				});
-
-				elBody.innerHTML = '';
-				(p.details || '').split('\n\n').forEach((par) => {
-					if (!par.trim()) return;
-					const el = document.createElement('p');
-					el.textContent = par.trim();
-					elBody.appendChild(el);
-				});
-
-				lastFocused = document.activeElement;
-				pond.classList.add('focused');
-				backdrop.hidden = false;
-				detail.hidden = false;
-				requestAnimationFrame(() => {
-					backdrop.classList.add('show');
-					detail.classList.add('show');
-				});
-				closeBtn.focus();
-				document.addEventListener('keydown', onKey);
-			}
-
-			function close() {
-				detail.classList.remove('show');
-				backdrop.classList.remove('show');
-				pond.classList.remove('focused');
-				document.removeEventListener('keydown', onKey);
-				const done = () => {
-					detail.hidden = true;
-					backdrop.hidden = true;
-					detail.removeEventListener('transitionend', done);
-				};
-				detail.addEventListener('transitionend', done);
-				if (lastFocused && lastFocused.focus) lastFocused.focus();
-			}
-
-			function onKey(e) {
-				if (e.key === 'Escape') close();
-			}
-
-			document.querySelectorAll('.lilypad').forEach((btn) => {
-				btn.addEventListener('click', () => open(btn.dataset.id));
-			});
-			closeBtn.addEventListener('click', close);
-			backdrop.addEventListener('click', close);
-		}
-
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', init);
-		} else {
-			init();
-		}
-	})();
+	split.querySelector('[data-close]')?.addEventListener('click', close);
+	window.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') close();
+	});
 </script>

@@ -1,138 +1,83 @@
 ---
-// Homepage — keep this simple: who you are, a photo, a short bio.
-// The draggable "stickers" below are a small taste of interactivity —
-// a self-contained island you can delete or expand later.
+// Landing page — this is both "home" and "about": your name on the left,
+// a short bio on the right. The "about" tab and your name both point here.
+//
+// The cursor here is a little paper airplane that leaves a dashed flight
+// path behind it. All the logic + tuning knobs live in
+// src/scripts/paper-plane.ts. (Mouse only; it stays out of the way on
+// touch screens and for reduced-motion users.)
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Andrea Chen" nav="left">
-	<section class="hero">
-		<div class="hero-text">
-			<h1>Hi, I'm Andrea 👋</h1>
-			<p class="lede">
-				A short bio goes here — what you're curious about, what you're
-				building, what you're studying. One or two friendly sentences is plenty.
-			</p>
-			<p>
-				<a href="/projects">See what I'm building →</a>
-			</p>
-		</div>
+<BaseLayout title="Andrea Chen" heading="Andrea Chen" home>
+	<p>Hi! I'm Andrea, a rising sophomore at MIT studying CS & math.</p>
 
-		<!-- Swap this placeholder for a real photo in /public later:
-		     <img src="/me.jpg" alt="Andrea" /> -->
-		<div class="photo" aria-hidden="true">your<br />photo</div>
-	</section>
+	<p>
+		... introductions are hard
+	</p>
 
-	<!-- === Draggable stickers: a tiny interactive island ===
-	     Try dragging these around! This whole block is optional and
-	     self-contained — the script at the bottom powers it. -->
-	<section class="playground" aria-label="Draggable stickers — try moving them!">
-		<p class="hint">↓ psst — try dragging these around ↓</p>
-		<div class="sticker" style="--x: 8%;  --y: 10px; --rot: -6deg; --c: #e5674f;">✿</div>
-		<div class="sticker" style="--x: 42%; --y: 40px; --rot:  5deg; --c: #4f8a7b;">★</div>
-		<div class="sticker" style="--x: 72%; --y: 0px;  --rot: -3deg; --c: #e0a13c;">☺</div>
-	</section>
+	<p class="links">
+		<a href="mailto:andreayc@mit.edu">email</a>
+		<span aria-hidden="true">·</span>
+		<a href="https://www.linkedin.com/in/andreaychen/">linkedin</a>
+		<span aria-hidden="true">·</span>
+		<a href="hhttps://github.com/andreach3n">github</a>
+	</p>
 </BaseLayout>
 
 <style>
-	.hero {
+	.tag {
+		color: var(--muted);
+		margin: 0 0 1.5rem;
+	}
+	.links {
+		margin-top: 1.75rem;
 		display: flex;
-		gap: 2rem;
-		align-items: center;
-		flex-wrap: wrap;
-		margin-top: 1rem;
-	}
-	.hero-text { flex: 1 1 320px; }
-	.photo {
-		flex: 0 0 180px;
-		height: 180px;
-		width: 180px;
-		border-radius: 50%;
-		background: repeating-linear-gradient(45deg, #f0e6d6, #f0e6d6 10px, #e7dbc7 10px, #e7dbc7 20px);
-		display: grid;
-		place-items: center;
-		text-align: center;
+		gap: 0.7rem;
 		color: var(--muted);
-		font-family: var(--font-display);
-		border: 1px solid var(--line);
+		font-size: 0.95rem;
 	}
+</style>
 
-	.playground {
-		position: relative;
-		height: 160px;
-		margin-top: 2.5rem;
-		border: 1px dashed var(--line);
-		border-radius: var(--radius);
-		background: #fffdf8;
+<!-- Cursor styles are global because the airplane and dashes are created
+     by paper-plane.ts and appended to <body>. -->
+<style is:global>
+	body.plane-cursor,
+	body.plane-cursor * {
+		cursor: none;
 	}
-	.hint {
-		position: absolute;
-		inset: auto 0 8px 0;
-		text-align: center;
-		color: var(--muted);
-		font-size: 0.85rem;
-		margin: 0;
+	.plane {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 26px;
+		height: 26px;
+		margin: -13px 0 0 -13px;
+		color: var(--ink);
 		pointer-events: none;
+		z-index: 9999;
+		will-change: transform;
 	}
-	.sticker {
-		position: absolute;
-		left: var(--x);
-		top: var(--y);
-		transform: rotate(var(--rot));
-		width: 56px;
-		height: 56px;
-		display: grid;
-		place-items: center;
-		font-size: 1.7rem;
-		color: #fff;
-		background: var(--c);
-		border-radius: 50%;
-		cursor: grab;
-		user-select: none;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-		touch-action: none; /* let us handle touch dragging ourselves */
+	.plane svg { display: block; }
+	.plane-dash {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 9px;
+		height: 2px;
+		margin: -1px 0 0 -4.5px;
+		border-radius: 2px;
+		background: var(--muted);
+		pointer-events: none;
+		z-index: 9998;
+		animation: dash-fade 2.4s ease-out forwards;
 	}
-	.sticker.dragging {
-		cursor: grabbing;
-		z-index: 10;
+	@keyframes dash-fade {
+		from { opacity: 0.85; }
+		to   { opacity: 0; }
 	}
 </style>
 
 <script>
-	// Makes every .sticker draggable with mouse OR touch.
-	// This runs in the browser; Astro bundles it automatically.
-	const stickers = document.querySelectorAll<HTMLElement>('.sticker');
-
-	stickers.forEach((el) => {
-		let startX = 0, startY = 0, originLeft = 0, originTop = 0;
-
-		const onDown = (e: PointerEvent) => {
-			el.setPointerCapture(e.pointerId);
-			el.classList.add('dragging');
-			const rect = el.getBoundingClientRect();
-			const parent = el.parentElement!.getBoundingClientRect();
-			// Switch from % positioning to fixed px so dragging is smooth.
-			originLeft = rect.left - parent.left;
-			originTop = rect.top - parent.top;
-			el.style.left = originLeft + 'px';
-			el.style.top = originTop + 'px';
-			startX = e.clientX;
-			startY = e.clientY;
-		};
-
-		const onMove = (e: PointerEvent) => {
-			if (!el.classList.contains('dragging')) return;
-			el.style.left = originLeft + (e.clientX - startX) + 'px';
-			el.style.top = originTop + (e.clientY - startY) + 'px';
-		};
-
-		const onUp = (e: PointerEvent) => {
-			el.classList.remove('dragging');
-			el.releasePointerCapture(e.pointerId);
-		};
-
-		el.addEventListener('pointerdown', onDown);
-		el.addEventListener('pointermove', onMove);
-		el.addEventListener('pointerup', onUp);
-	});
+	import '../scripts/paper-plane';
 </script>
