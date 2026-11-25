@@ -10,7 +10,7 @@
 //
 // Props:
 //   title    -> the document <title> (browser tab)
-//   heading  -> the big visible title in the left column
+//   heading  -> the big visible title in the left column ("" hides it)
 //   home     -> the landing page. Hides the small name link up top
 //               (the big left title already shows the name).
 import '../styles/global.css';
@@ -33,8 +33,7 @@ const {
 const navLinks = [
 	{ href: '/', label: 'about' },
 	{ href: '/projects', label: 'projects' },
-	{ href: '/writing', label: 'writing' },
-	{ href: '/now', label: 'now' },
+	{ href: '/now', label: ':)' },
 ];
 
 const path = Astro.url.pathname;
@@ -77,7 +76,7 @@ const isCurrent = (href: string) =>
 
 		<div class="container">
 			<div class="left-column">
-				<h1 class="page-title">{heading}</h1>
+				{heading && <h1 class="page-title">{heading}</h1>}
 			</div>
 			<div class="right-column">
 				<slot />

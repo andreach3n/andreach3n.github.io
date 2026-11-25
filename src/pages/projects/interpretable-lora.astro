@@ -1,0 +1,93 @@
+---
+// Project page: training an interpretable LoRA with parameter decomposition
+// (CBAI Research Fellowship). Linked from the bio on the home page and from
+// the list on /projects.
+//
+// Weekly updates go in the `updates` array below, newest first. Each update:
+//   week  -> week number
+//   date  -> 'YYYY-MM-DD' (optional)
+//   title -> short headline (optional)
+//   href  -> link for the week's heading, e.g. its Google Doc tab (optional)
+//   body  -> list of paragraphs (plain strings, optional)
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const doc = 'https://docs.google.com/document/d/11dKDw8glKBMcEcl7AN8oMCar2H0rkp7oJ5B3AR96ZQc/edit?tab=';
+
+const updates: { week: number; date?: string; title?: string; href?: string; body?: string[] }[] = [
+	{ week: 5, href: doc + 't.abccenkj1ktq' },
+	{ week: 4, href: doc + 't.z4cittro2mji' },
+	{ week: 3, href: doc + 't.68fbxp4rwyan' },
+	{ week: 2, href: doc + 't.13jk9igusvm4' },
+	{ week: 1, href: doc + 't.0' },
+];
+
+const fmt = (date: string) =>
+	new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+---
+
+<BaseLayout title="interpretable LoRA — Andrea Chen" heading="projects">
+	<p class="back"><a href="/projects">← all projects</a></p>
+
+	<article class="entry">
+		<h2>Training an Interpretable LoRA with Parameter Decomposition</h2>
+		<p class="dim">CBAI Research Fellowship · with Oli Clive-Griffin (Goodfire) &amp; Nathan Hu (Stanford)</p>
+
+		<p>
+			While LoRAs are meant to be low-rank and thus interpretable, they
+			don&rsquo;t actually end up interpretable. Can we use parameter
+			decomposition to train an interpretable LoRA, where each weight has
+			<em>C</em> gated rank-one components, and eventually disentangle
+			behaviors in the fine-tuning dataset by finding the components that
+			are causally important to each?
+		</p>
+
+		<h3>weekly updates</h3>
+		{updates.length === 0 && <p class="dim">no updates yet, check back soon!</p>}
+		<ul class="updates">
+			{updates.map((u) => (
+				<li>
+					<h4>
+						{u.href ? (
+							<a href={u.href}>Week {u.week}{u.title ? ` — ${u.title}` : ''}</a>
+						) : (
+							<>Week {u.week}{u.title ? ` — ${u.title}` : ''}</>
+						)}
+						{u.date && <span class="dim date"> · {fmt(u.date)}</span>}
+					</h4>
+					{u.body?.map((p) => <p>{p}</p>)}
+				</li>
+			))}
+		</ul>
+	</article>
+</BaseLayout>
+
+<style>
+	.back {
+		margin: 0 0 1.5rem;
+		font-size: 0.9rem;
+	}
+	.entry h2 {
+		font-size: 1.5rem;
+		margin: 0 0 0.25rem;
+	}
+	.entry h3 {
+		font-size: 1.15rem;
+		margin: 2rem 0 0.5rem;
+	}
+	.updates {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+	}
+	.updates h4 {
+		font-size: 1.05rem;
+		margin: 0;
+	}
+	.date {
+		font-weight: normal;
+		white-space: nowrap;
+	}
+</style>
