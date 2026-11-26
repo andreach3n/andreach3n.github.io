@@ -1,11 +1,6 @@
 ---
 // Landing page — this is both "home" and "about": your name on the left,
 // a short bio on the right. The "about" tab and your name both point here.
-//
-// The cursor here is a little paper airplane that leaves a dashed flight
-// path behind it. All the logic + tuning knobs live in
-// src/scripts/paper-plane.ts. (Mouse only; it stays out of the way on
-// touch screens and for reduced-motion users.)
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -48,46 +43,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		font-size: 0.95rem;
 	}
 </style>
-
-<!-- Cursor styles are global because the airplane and dashes are created
-     by paper-plane.ts and appended to <body>. -->
-<style is:global>
-	body.plane-cursor,
-	body.plane-cursor * {
-		cursor: none;
-	}
-	.plane {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 26px;
-		height: 26px;
-		margin: -13px 0 0 -13px;
-		color: var(--ink);
-		pointer-events: none;
-		z-index: 9999;
-		will-change: transform;
-	}
-	.plane svg { display: block; }
-	.plane-dash {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 9px;
-		height: 2px;
-		margin: -1px 0 0 -4.5px;
-		border-radius: 2px;
-		background: var(--muted);
-		pointer-events: none;
-		z-index: 9998;
-		animation: dash-fade 2.4s ease-out forwards;
-	}
-	@keyframes dash-fade {
-		from { opacity: 0.85; }
-		to   { opacity: 0; }
-	}
-</style>
-
-<script>
-	import '../scripts/paper-plane';
-</script>
