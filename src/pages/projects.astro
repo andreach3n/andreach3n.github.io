@@ -2,8 +2,10 @@
 // Projects — a list of titles; clicking one slides open a side panel with
 // a longer description (the title column shrinks to make room).
 // Add or edit entries in the array below:
+//   section -> which header it's listed under (see `sections` below)
 //   title   -> the project name (click target)
 //   note    -> one quiet line underneath (venue, year, tech, whatever)
+//   dates   -> optional, shown after the note as "note · dates"
 //   details -> the panel body, in order. Each item is either a paragraph
 //              (a plain string) or a photo (an object { src, alt, caption? }).
 //              Mix them freely to scatter photos between paragraphs. Photo
@@ -13,10 +15,16 @@
 //              (for a single link you can also just use href / linkText.)
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+// Section headers on the list, in this order. Each project's `section`
+// must match one of these.
+const sections = ['research', 'design', 'software'];
+
 const projects = [
 	{
+		section: 'research',
 		title: 'Interpretable LoRA via Parameter Decomposition',
 		note: 'CBAI Research Fellowship',
+		dates: 'Oct 2026 – Present',
 		details: [
 			'Ongoing. I post weekly updates!',
 		],
@@ -25,8 +33,10 @@ const projects = [
 		],
 	},
 	{
+		section: 'research',
 		title: '"Flipped" Tuned Lens',
 		note: 'mechinterp research',
+		dates: 'Jun 2026 – Oct 2026',
 		details: [
 			'Ongoing - I keep a log of what I try!',
 		],
@@ -35,38 +45,46 @@ const projects = [
 		],
 	},
 	{
-		title: 'Pocket-Pod Sofa',
-		note: 'inflatable social sofa :)',
-		details: [
-			{src: '/projects/sofa1.jpg', alt:'sofa', caption: 'ft. Keira, our model'},
-			'more on this soon!'
-		],
-	},
-	{
+		section: 'design',
 		title: 'Forming Waves: Mold-Pressed Aluminum',
 		note: 'molds, plywood, hydraulic press, deformation',
+		dates: 'Mar 2026 – Apr 2026',
 		details: [
 			{src: '/projects/longwave.jpg', alt:'longwave'},
 			'more on this soon!'
 		],
 	},
 	{
+		section: 'design',
+		title: 'Pocket-Pod Sofa',
+		note: 'inflatable social sofa :)',
+		dates: 'Apr 2026 – May 2026',
+		details: [
+			{src: '/projects/sofa1.jpg', alt:'sofa', caption: 'ft. Keira, our model'},
+			'more on this soon!'
+		],
+	},
+	{
+		section: 'research',
 		title:
 			'Necklaces, permutations, and periodic critical orbits for quadratic polynomials',
-		note: 'European Journal of Combinatorics, 2026',
+		note: 'European Journal of Combinatorics (2026)',
+		dates: 'Jun 2024 – Sep 2025',
 		details: [
 			"Let $G_n$ denote the nth Gleason polynomial, whose roots correspond to parameters $c$ such that the critical point 0 is periodic of exact period $n$ under iteration of $z^2+c$, and let $\\bar{G}_n$ denote the reduction of $G_n$ modulo 2. Buff, Floyd, Koch, and Parry made the surprising observation that the number of real roots of $G_n$ is equal to the number of irreducible factors of $\\bar{G}_n$ for all $n$.",
 			"We provide a bijective proof for this result by first providing explicit bijections between (a) the set of real roots of $G_n$ and the set $\\bar{N}(n)$ of equivalence classes of primitive binary necklaces of length n under the inversion map swapping 0 and 1; and (b) the set of irreducible factors of $G_n$ modulo 2 and the set $\\tilde{N}^+(n)$ of binary necklaces which are either primitive of length n with an even number of 1's or primitive of length n/2 with an odd number of 1's. We then provide an explicit bijection, closely related to Milnor and Thurston's kneading theory, between $\\bar{N}(n)$ and $\\tilde{N}^+(n)$.",
 			"In addition, we provide explicit bijections between $\\bar{N}(n)$, the set CUP(n) of cyclic unimodal permutations of $\\{1,\\ldots,n\\}$, and the set $N^-(n)$ of primitive binary necklaces of length n with an odd number of 1's.",
 		],
 		links: [
-			{ href: 'https://www.sciencedirect.com/science/article/pii/S019566982600020X', text: 'read the paper →' },
+			{ href: 'https://doi.org/10.1016/j.ejc.2026.104352', text: 'read the paper →' },
 			{ href: 'https://meetings.ams.org/math/jmm2025/meetingapp.cgi/Paper/40130', text: 'AMS Special Session on Arithmetic Dynamics of Single and Multiple Maps' },
 		],
 	},
 	{
+		section: 'software',
 		title: 'Panic! at the Easel',
 		note: '1st Place MIT Web.Lab, 2026',
+		dates: 'Jan 2026',
 		details: [
 			{src: '/projects/panic.png', alt:'game homepage'},
 			// a photo can go between paragraphs, like this:
@@ -80,21 +98,28 @@ const projects = [
 
 <BaseLayout title="projects — Andrea Chen" heading="projects">
 	<div class="split" id="split">
-		<ul class="projects">
-			{projects.map((p, i) => (
-				<li>
-					<button class="title" data-open={i}>{p.title}</button>
-					<p class="dim">{p.note}</p>
-				</li>
+		<div class="projects">
+			{sections.map((section) => (
+				<section class="group">
+					<h2 class="group-title">{section}</h2>
+					<ul class="list">
+						{projects.map((p, i) => p.section === section && (
+							<li>
+								<button class="title" data-open={i}>{p.title}</button>
+								<p class="dim">{p.note}{p.dates && ` · ${p.dates}`}</p>
+							</li>
+						))}
+					</ul>
+				</section>
 			))}
-		</ul>
+		</div>
 
 		<aside class="panel" aria-label="project details">
 			<button class="close" data-close aria-label="close details">&times;</button>
 			{projects.map((p, i) => (
 				<article class="detail" data-detail={i} hidden>
 					<h3>{p.title}</h3>
-					<p class="dim">{p.note}</p>
+					<p class="dim">{p.note}{p.dates && ` · ${p.dates}`}</p>
 					{p.details?.map((item) =>
 						typeof item === 'string' ? (
 							<p>{item}</p>
@@ -141,14 +166,23 @@ const projects = [
 	}
 
 	.projects {
+		display: flex;
+		flex-direction: column;
+		gap: 2.75rem; /* space between sections */
+		min-width: 0;
+		max-width: 60ch; /* keep the closed title list at a comfortable width */
+	}
+	.group-title {
+		font-size: 1.3rem;
+		margin: 0 0 1rem;
+	}
+	.list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		display: flex;
 		flex-direction: column;
 		gap: 1.6rem;
-		min-width: 0;
-		max-width: 60ch; /* keep the closed title list at a comfortable width */
 	}
 	.projects p {
 		margin: 0.15rem 0 0;
